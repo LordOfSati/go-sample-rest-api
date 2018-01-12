@@ -32,9 +32,9 @@ func (movieRepository *MovieRepository) FindAllMovies() ([]model.Movie, error) {
 }
 
 // FindByID - To find a movie by ID
-func (movieRepository *MovieRepository) FindByID(id string) (model.Movie, error) {
+func (movieRepository *MovieRepository) FindByID(id int) (model.Movie, error) {
 	var movie model.Movie
-	err := database.C(movieRepository.Collection).FindId(bson.ObjectIdHex(id)).One(&movie)
+	err := database.C(movieRepository.Collection).FindId(id).One(&movie)
 	return movie, err
 }
 

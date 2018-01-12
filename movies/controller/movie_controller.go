@@ -3,8 +3,10 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	repository "github.com/LordOfSati/go-sample-rest-api/movies/repository"
+	"github.com/gorilla/mux"
 )
 
 var movieRepository = repository.MovieRepository{}
@@ -16,32 +18,42 @@ func init() {
 	movieRepository.Connect()
 }
 
-// GetAllMovies ...
+// GetAllMovies - To get all movies
 func GetAllMovies(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	if movies, err := movieRepository.FindAllMovies(); err != nil {
-		fmt.Println("Error in fetching data")
+		SendError(w, err)
 	} else {
-		fmt.Println(movies)
+		SendResponse(w, movies)
 	}
-	fmt.Println("GetAllMovies..")
 }
 
-// GetMovieByID ...
+// GetMovieByID - To get a movie by ID
 func GetMovieByID(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("GetMoviesById..")
+	defer r.Body.Close()
+	vars := mux.Vars(r)
+	movieID, _ := strconv.Atoi(vars["id"])
+	if movie, err := movieRepository.FindByID(movieID); err != nil {
+		SendError(w, err)
+	} else {
+		SendResponse(w, movie)
+	}
 }
 
-// CreateMovie ...
+// CreateMovie - To create new movie
 func CreateMovie(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	fmt.Println("CreateMovie..")
 }
 
-// UpdateMovie ...
+// UpdateMovie - To update an existing movie
 func UpdateMovie(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	fmt.Println("UpdateMovie..")
 }
 
-// DeleteMovie ...
+// DeleteMovie - To delete an existing movie
 func DeleteMovie(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	fmt.Println("DeleteMovie..")
 }
