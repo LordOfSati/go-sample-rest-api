@@ -1,19 +1,20 @@
 package controller
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
-	"strconv"
 
+	model "github.com/LordOfSati/go-sample-rest-api/movies/model"
 	repository "github.com/LordOfSati/go-sample-rest-api/movies/repository"
 	"github.com/gorilla/mux"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var movieRepository = repository.MovieRepository{}
 
 func init() {
 	movieRepository.Server = "localhost"
-	movieRepository.Database = "movies"
+	movieRepository.Database = "movies-new"
 	movieRepository.Collection = "movies"
 	movieRepository.Connect()
 }
@@ -32,7 +33,7 @@ func GetAllMovies(w http.ResponseWriter, r *http.Request) {
 func GetMovieByID(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
-	movieID, _ := strconv.Atoi(vars["id"])
+	movieID := vars["id"]
 	if movie, err := movieRepository.FindByID(movieID); err != nil {
 		SendError(w, err)
 	} else {
@@ -43,17 +44,45 @@ func GetMovieByID(w http.ResponseWriter, r *http.Request) {
 // CreateMovie - To create new movie
 func CreateMovie(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	fmt.Println("CreateMovie..")
+	var movie model.Movie
+	if err := json.NewDecoder(r.Body).Decode(&movie); err != nil {
+		SendError(w, err)
+		return
+	}
+	movie.ID = bson.NewObjectId()
+	if err := movieRepository.Insert(movie); err != nil {
+		SendError(w, err)
+		return
+	}
+	SendResponse(w, movie)
 }
 
 // UpdateMovie - To update an existing movie
 func UpdateMovie(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	fmt.Println("UpdateMovie..")
+	var movie model.Movie
+	if err := json.NewDecoder(r.Body).Decode(&movie); err != nil {
+		SendError(w, err)
+		return
+	}
+	if err := movieRepository.Update(movie); err != nil {
+		SendError(w, err)
+		return
+	}
+	SendResponse(w, movie)
 }
 
 // DeleteMovie - To delete an existing movie
 func DeleteMovie(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	fmt.Println("DeleteMovie..")
+	var movie model.Movie
+	if err := json.NewDecoder(r.Body).Decode(&movie); err != nil {
+		SendError(w, err)
+		return
+	}
+	if err := movieRepository.Delete(movie); err != nil {
+		SendError(w, err)
+		return
+	}
+	SendResponse(w, map[string]string{"result": "success"})
 }

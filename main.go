@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/LordOfSati/go-sample-rest-api/movies/controller"
@@ -15,8 +14,7 @@ func main() {
 	router.HandleFunc("/movies", controller.CreateMovie).Methods("POST")
 	router.HandleFunc("/movies", controller.UpdateMovie).Methods("PUT")
 	router.HandleFunc("/movies", controller.DeleteMovie).Methods("DELETE")
-	if err := http.ListenAndServe(":8080", router); err == nil {
-		fmt.Println("Listening in PORT 8080")
+	if err := http.ListenAndServe(":8080", router); err != nil {
+		panic("Error in server start up ..")
 	}
-	panic("Error in server start up ..")
 }
