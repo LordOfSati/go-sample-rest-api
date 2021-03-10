@@ -1,7 +1,7 @@
 package repository
 
 import (
-	model "github.com/LordOfSati/go-sample-rest-api/movies/model"
+	model "github.com/satzrp/go-sample-rest-api/movies/model"
 	mongo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )

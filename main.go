@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/LordOfSati/go-sample-rest-api/movies/controller"
 	"github.com/gorilla/mux"
+	"github.com/satzrp/go-sample-rest-api/movies/controller"
 )
 
 func main() {

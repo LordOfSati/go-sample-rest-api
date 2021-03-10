@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	model "github.com/LordOfSati/go-sample-rest-api/movies/model"
-	repository "github.com/LordOfSati/go-sample-rest-api/movies/repository"
 	"github.com/gorilla/mux"
+	model "github.com/satzrp/go-sample-rest-api/movies/model"
+	repository "github.com/satzrp/go-sample-rest-api/movies/repository"
 	"gopkg.in/mgo.v2/bson"
 )
 
